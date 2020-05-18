@@ -116,5 +116,85 @@ public class StudentDbUtil {
 			close(myCon, myStmt, null);
 		}
 	}
+
+	public Student getStudent(String theStudentId) throws Exception {
+		
+		Student theStudent = null;
+		
+		Connection myConn = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRs = null;
+		int studentId;
+		
+		try{
+			// convert studentId int:
+			studentId = Integer.parseInt(theStudentId);
+			
+			// get connection to database:
+			myConn = dataSource.getConnection();
+			
+			// create sql to get selected statement:
+			String sql = "select * from student where id=?";
+			
+			// create prepared statement:
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set parameters:
+			myStmt.setInt(1, studentId);
+			
+			//execute statement:
+			myRs = myStmt.executeQuery();
+			
+			if (myRs.next()){
+				//retrieve data from result set row:
+				String firstName = myRs.getString("first_name");
+				String lastName = myRs.getString("last_name");
+				String email = myRs.getString("email");
+				
+				theStudent = new Student(studentId , firstName ,lastName ,email);
+			}
+			else{
+				throw new Exception("Hmmm !! could not find student Id : " + studentId);
+			}
+
+			return theStudent;
+		}
+		finally{
+			// clear JDBC objects:
+			close(myConn, myStmt, myRs);
+		}
+	}
+
+	public void updateStudent(Student theStudent) throws Exception {
+		
+		Connection myConn = null;
+		PreparedStatement myStmt = null;
+		
+		try{	
+			// setup connection to database:
+			myConn = dataSource.getConnection();
+			
+			// make sql query:
+			String sql = "update student "
+					+ "set first_name=?, last_name=?, email=? "
+					+ "where id=?";
+			
+			// create prepared statement:
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set parameters:
+			myStmt.setString(1, theStudent.getFirstName());
+			myStmt.setString(2, theStudent.getLastName());
+			myStmt.setString(3, theStudent.getEmail());
+			myStmt.setInt(4, theStudent.getId());
+			
+			// execute query to update database:
+			myStmt.execute();
+		}
+		finally {
+			// close connection:
+			close(myConn, myStmt, null);
+		}
+	}
 	
 }

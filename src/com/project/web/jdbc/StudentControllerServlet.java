@@ -67,6 +67,14 @@ public class StudentControllerServlet extends HttpServlet {
 				addStudent(request,response);
 				break;
 				
+			case "LOAD":
+				loadStudent(request,response);
+				break;
+				
+			case "UPDATE":
+				updateStudent(request,response);
+				break;
+				
 			default:
 				listStudent(request,response);
 			}
@@ -75,6 +83,43 @@ public class StudentControllerServlet extends HttpServlet {
 		catch (Exception e){
 			throw new ServletException(e);
 		}
+	}
+
+
+
+	private void updateStudent(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// get updated student data from html form:
+		int id = Integer.parseInt(request.getParameter("studentId"));
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		String email = request.getParameter("email");
+		
+		// create new student object:
+		Student theStudent = new Student(id, firstName, lastName, email);
+		
+		// update data on database:
+		studentDbUtil.updateStudent(theStudent);
+		
+		// send user to list:
+		listStudent(request, response);
+	}
+
+
+
+	private void loadStudent(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		// read student id:
+		String theStudentId = request.getParameter("studentId");
+		
+		// get student from database:
+		Student theStudent = studentDbUtil.getStudent(theStudentId);
+		
+		// place student in request attribute:
+		request.setAttribute("THE_STUDENT", theStudent);
+		
+		// send to jsp page: update-student-form.jsp
+		RequestDispatcher dispatcher =
+				request.getRequestDispatcher("/update-student-form.jsp");
+		dispatcher.forward(request, response);
 	}
 
 

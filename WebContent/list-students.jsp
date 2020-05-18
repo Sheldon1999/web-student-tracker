@@ -1,4 +1,4 @@
-<%@ page import="java.util.*, com.project.web.jdbc.*" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,12 +8,6 @@
 	<link type="text/css" rel="stylesheet" href="css/style.css">
 
 </head>
-
-<%
-	// get the students from the request object (sent by servlet)
-	List<Student> theStudents = (List<Student>) request.getAttribute("STUDENTS_LIST");
-
-%>
 
 <body>
 
@@ -37,15 +31,24 @@
 					<th>First Name</th>
 					<th>Last Name</th>
 					<th>Email</th>
+					<th>Action</th>
 				</tr>
 				
-				<% for (Student temp : theStudents) {%>
+				<c:forEach var="temp" items="${STUDENTS_LIST}">
+					<!-- set up a link for each element -->
+					<c:url var="tempLink" value="StudentControllerServlet">
+						<c:param name="command" value="LOAD" />
+						<c:param name="studentId" value="${temp.id}" />
+					</c:url>
 					<tr>
-						<td> <%= temp.getFirstName() %></td>
-						<td> <%= temp.getLastName() %></td>
-						<td> <%= temp.getEmail() %></td>
+						<td> ${temp.firstName} </td>
+						<td> ${temp.lastName} </td>
+						<td> ${temp.email} </td>
+						<td> 
+							<a href="${tempLink}">Update</a>
+						</td>
 					</tr>
-				<% } %>
+				</c:forEach>
 			</table>
 		</div>
 	</div>
