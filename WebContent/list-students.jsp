@@ -35,9 +35,14 @@
 				</tr>
 				
 				<c:forEach var="temp" items="${STUDENTS_LIST}">
-					<!-- set up a link for each element -->
-					<c:url var="tempLink" value="StudentControllerServlet">
+					<!-- set up a update link -->
+					<c:url var="updateLink" value="StudentControllerServlet">
 						<c:param name="command" value="LOAD" />
+						<c:param name="studentId" value="${temp.id}" />
+					</c:url>
+					<!-- set up a delete link -->
+					<c:url var="deleteLink" value="StudentControllerServlet">
+						<c:param name="command" value="DELETE" />
 						<c:param name="studentId" value="${temp.id}" />
 					</c:url>
 					<tr>
@@ -45,7 +50,11 @@
 						<td> ${temp.lastName} </td>
 						<td> ${temp.email} </td>
 						<td> 
-							<a href="${tempLink}">Update</a>
+							<a href="${updateLink}">Update</a>
+							|
+							<a href="${deleteLink}"
+							onclick="if (!(confirm('Are you really want to delete?'))) return false; ">
+							Delete</a>
 						</td>
 					</tr>
 				</c:forEach>
