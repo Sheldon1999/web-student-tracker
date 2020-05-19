@@ -31,6 +31,6 @@ Follow the steps below to run project in your local machine:
 4. run tomcat.
 5. in browser run [http://localhost:8080/web-student-tracker/](http://localhost:8080/web-student-tracker/).
 
-## Demo
+## Demo gif
 
 
