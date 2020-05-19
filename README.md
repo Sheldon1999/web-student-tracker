@@ -33,4 +33,4 @@ Follow the steps below to run project in your local machine:
 
 ## Demo gif
 
-
+![Demo gif](https://github.com/Sheldon1999/web-student-tracker/blob/master/Demo.gif)
